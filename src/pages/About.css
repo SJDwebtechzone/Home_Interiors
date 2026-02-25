@@ -1,0 +1,290 @@
+/* ─── Page Hero (shared) ─── */
+.page-hero {
+    position: relative;
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.page-hero-inner {
+    max-width: 1000px;
+    /* Increased for wider screen presence */
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    position: relative;
+    z-index: 1;
+}
+
+.page-hero-inner h1 {
+    margin-bottom: 14px;
+}
+
+.page-hero-inner p {
+    font-size: 1.05rem;
+    max-width: 560px;
+}
+
+/* ─── Mission ─── */
+.mission-section {
+    padding: var(--section-pad) 0;
+    background: linear-gradient(rgba(26, 23, 20, 0.9), rgba(26, 23, 20, 0.9)),
+        url('https://images.unsplash.com/photo-1618219908412-a29a1bb7b86e?auto=format&fit=crop&q=80&w=1600');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.mission-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: clamp(40px, 7vw, 80px);
+    align-items: start;
+}
+
+.mission-visual {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.mission-box {
+    padding: 44px 36px;
+    border-radius: var(--rad-md);
+    text-align: center;
+}
+
+.mission-icon-ring {
+    font-size: 2.5rem;
+    color: var(--gold);
+    margin-bottom: 20px;
+    display: inline-block;
+    animation: rotateSlow 10s linear infinite;
+}
+
+.mission-box h3 {
+    margin-bottom: 14px;
+}
+
+.mission-box p {
+    font-size: 0.95rem;
+    line-height: 1.8;
+}
+
+.mission-stat-pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.mstat {
+    padding: 28px 20px;
+    border-radius: var(--rad-md);
+    text-align: center;
+}
+
+.mstat p {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin-top: 6px;
+}
+
+.mission-text {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    padding-top: 10px;
+}
+
+.mission-text p {
+    line-height: 1.85;
+}
+
+/* ─── Values ─── */
+.values-section {
+    padding: var(--section-pad) 0;
+    background: var(--charcoal);
+}
+
+.value-card {
+    padding: 36px 28px;
+    border-radius: var(--rad-md);
+    text-align: center;
+    transition: transform var(--dur) var(--ease), box-shadow var(--dur);
+    background-size: cover;
+    background-position: center;
+}
+
+.value-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-gold);
+}
+
+.value-icon {
+    font-size: 2rem;
+    color: var(--gold);
+    margin-bottom: 18px;
+    display: inline-block;
+}
+
+.value-card h4 {
+    margin-bottom: 10px;
+}
+
+/* ─── Timeline ─── */
+.timeline-section {
+    padding: var(--section-pad) 0;
+    background: var(--charcoal-mid);
+}
+
+.timeline {
+    position: relative;
+    max-width: 1100px;
+    /* Increased for full-screen feel */
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.timeline-line {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 1px;
+    background: linear-gradient(180deg, var(--gold), rgba(201, 168, 76, 0.1));
+    transform: translateX(-50%);
+}
+
+.timeline-item {
+    display: flex;
+    align-items: flex-start;
+    position: relative;
+    z-index: 1;
+}
+
+.timeline-item.left {
+    justify-content: flex-end;
+    padding-right: calc(50% + 30px);
+}
+
+.timeline-item.right {
+    justify-content: flex-start;
+    padding-left: calc(50% + 30px);
+}
+
+.tl-dot {
+    position: absolute;
+    top: 18px;
+    left: calc(50% - 7px);
+    width: 14px;
+    height: 14px;
+    background: var(--gold);
+    border-radius: 50%;
+    border: 3px solid var(--charcoal);
+    box-shadow: 0 0 0 4px rgba(201, 168, 76, 0.2);
+}
+
+.tl-card {
+    padding: 22px 24px;
+    border-radius: var(--rad-md);
+    max-width: 360px;
+    width: 100%;
+}
+
+.tl-year {
+    display: inline-block;
+    font-family: var(--font-serif);
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--gold);
+    margin-bottom: 8px;
+}
+
+.tl-card p {
+    font-size: 0.9rem;
+    line-height: 1.75;
+}
+
+/* ─── Team ─── */
+.team-section {
+    padding: var(--section-pad) 0;
+    background: var(--charcoal);
+}
+
+.team-card {
+    padding: 36px 24px;
+    border-radius: var(--rad-md);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    transition: transform var(--dur) var(--ease), box-shadow var(--dur);
+}
+
+.team-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-gold);
+}
+
+.team-avatar-box {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 12px;
+    border: 2px solid var(--gold);
+    animation: pulseGold 4s ease-in-out infinite;
+    background-color: var(--charcoal-mid);
+}
+
+.team-avatar-overlay {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, transparent 30%, rgba(26, 23, 20, 0.4));
+}
+
+.team-role {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    text-align: center;
+}
+
+.team-exp {
+    margin-top: 4px;
+}
+
+@media (max-width: 900px) {
+    .mission-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .timeline-line {
+        left: 18px;
+    }
+
+    .timeline-item.left {
+        justify-content: flex-start;
+        padding-right: 0;
+        padding-left: 52px;
+    }
+
+    .timeline-item.right {
+        padding-left: 52px;
+    }
+
+    .tl-dot {
+        left: 11px;
+    }
+
+    .tl-card {
+        max-width: 100%;
+    }
+}
