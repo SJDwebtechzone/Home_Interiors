@@ -83,6 +83,3 @@ The website uses a **"Charcoal & Gold"** aesthetic to evoke a sense of exclusivi
 - **Email Automation**: Professional inquiries are automatically routed to `nagarjunbm90@gmail.com` via the secure backend handler.
 - **Charcoal (#1a1714)**: Represents the solid foundation of craftsmanship.
 - **Gold (#c9a84c)**: Represents the "✦" (spark) of creativity and luxury.
-
----
-*Created with elegance by Antigravity.*
