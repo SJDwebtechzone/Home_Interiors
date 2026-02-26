@@ -6,9 +6,8 @@ import Home from './pages/Home'
 import About from './pages/About'
 import Design from './pages/Design'
 import Contact from './pages/Contact'
-import Login from './pages/Login'
 import More from './pages/More'
-import Dashboard from './pages/Dashboard'
+import Login from './pages/Login'
 import ServiceDetail from './pages/ServiceDetail'
 import ScrollToTop from './components/ScrollToTop'
 
@@ -57,7 +56,6 @@ function App() {
           <Route path="/services/:id" element={<ServiceDetail />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/more" element={<More />} />
         </Routes>
       </main>

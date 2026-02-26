@@ -12,7 +12,7 @@
     *   **Design**: A filterable gallery of 12 signature projects and a tiered pricing system (Essence, Signature, Prestige).
     *   **About**: Shares the studio's history since 2011, mission, core values, and a timeline of major milestones.
     *   **Contact**: Includes a detailed consultation booking form, studio information, and an interactive-style map placeholder and FAQ.
-    *   **Login/Security**: A complete authentication interface with Sign In, Sign Up, and Forgot Password flows, including social login options.
+    *   **Login & Portal (Formerly Dashboard)**: A complete, integrated authentication and client portal interface. Includes Sign In, Sign Up, and Forgot Password flows, as well as the personal design status dashboard once authenticated.
     *   **More (Journal & Resources)**: A blog system with featured posts, downloadable design resources, and an industry awards showcase.
 3.  **Responsive Engineering**: Fully optimized for Desktop, Tablet, and Mobile devices with a custom hamburger menu drawer for smaller screens.
 4.  **Premium UX**:
@@ -83,3 +83,4 @@ The website uses a **"Charcoal & Gold"** aesthetic to evoke a sense of exclusivi
 - **Email Automation**: Professional inquiries are automatically routed to `nagarjunbm90@gmail.com` via the secure backend handler.
 - **Charcoal (#1a1714)**: Represents the solid foundation of craftsmanship.
 - **Gold (#c9a84c)**: Represents the "✦" (spark) of creativity and luxury.
+`
