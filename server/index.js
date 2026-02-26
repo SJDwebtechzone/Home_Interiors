@@ -1,6 +1,7 @@
 const express = require('express');
 const nodemailer = require('nodemailer');
 const cors = require('cors');
+const pool = require('./db');
 
 const app = express();
 app.use(cors()); // Allow all origins
@@ -57,6 +58,43 @@ app.post('/api/contact', (req, res) => {
         console.log('✅ V4 SUCCESS:', info.response);
         res.status(200).json({ success: true, details: info.response });
     });
+});
+
+// --- NEW POSTGRESQL API ENDPOINTS ---
+
+app.post('/api/login', async (req, res) => {
+    const { email, password } = req.body;
+    try {
+        const userRes = await pool.query('SELECT * FROM users WHERE email = $1 AND password = $2', [email, password]);
+        if (userRes.rows.length > 0) {
+            res.json({ success: true, user: { id: userRes.rows[0].id, name: userRes.rows[0].name, email: userRes.rows[0].email } });
+        } else {
+            res.status(401).json({ success: false, message: 'Invalid credentials' });
+        }
+    } catch (err) {
+        console.error('Login Error:', err);
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+});
+
+app.get('/api/user/:id/projects', async (req, res) => {
+    try {
+        const result = await pool.query('SELECT * FROM projects WHERE user_id = $1', [req.params.id]);
+        res.json({ success: true, projects: result.rows });
+    } catch (err) {
+        console.error('Projects Fetch Error:', err);
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+});
+
+app.get('/api/user/:id/payments', async (req, res) => {
+    try {
+        const result = await pool.query('SELECT * FROM payments WHERE user_id = $1 ORDER BY date DESC', [req.params.id]);
+        res.json({ success: true, payments: result.rows });
+    } catch (err) {
+        console.error('Payments Fetch Error:', err);
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
 });
 
 app.listen(PORT, () => {

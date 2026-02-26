@@ -1,11 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import './Login.css'
-
-const myProjects = [
-    { title: 'The Sky Villa', status: 'In Progress', progress: 65, phase: 'Procurement', img: 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&q=80&w=600' },
-    { title: 'Zen Office', status: 'Completed', progress: 100, phase: 'Final Handover', img: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=600' },
-]
 
 const upcomingMeetings = [
     { date: 'Oct 28', time: '11:00 AM', title: 'Material Selection', type: 'Studio Visit' },
@@ -15,21 +10,63 @@ const upcomingMeetings = [
 export default function Login() {
     // Auth States
     const [isLoggedIn, setIsLoggedIn] = useState(false)
+    const [user, setUser] = useState(null)
     const [mode, setMode] = useState('login')
     const [form, setForm] = useState({ name: '', email: '', password: '', confirm: '' })
     const [showPassword, setShowPassword] = useState(false)
     const [loading, setLoading] = useState(false)
+    const [errorMsg, setErrorMsg] = useState('')
+
+    // Dashboard Data States
+    const [myProjects, setMyProjects] = useState([])
+    const [myPayments, setMyPayments] = useState([])
 
     const handleInput = e => setForm(f => ({ ...f, [e.target.name]: e.target.value }))
 
-    const handleSubmit = e => {
+    const fetchDashboardData = async (userId) => {
+        try {
+            const projRes = await fetch(`http://localhost:5001/api/user/${userId}/projects`)
+            const projData = await projRes.json()
+            if (projData.success) setMyProjects(projData.projects)
+
+            const payRes = await fetch(`http://localhost:5001/api/user/${userId}/payments`)
+            const payData = await payRes.json()
+            if (payData.success) setMyPayments(payData.payments)
+        } catch (err) {
+            console.error('Error fetching dashboard data:', err)
+        }
+    }
+
+    const handleSubmit = async e => {
         e.preventDefault()
         setLoading(true)
-        // Simulated Auth
-        setTimeout(() => {
-            setLoading(false)
-            setIsLoggedIn(true)
-        }, 1500)
+        setErrorMsg('')
+
+        try {
+            const response = await fetch('http://localhost:5001/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: form.email, password: form.password })
+            });
+            const data = await response.json();
+
+            if (data.success) {
+                setUser(data.user);
+                setIsLoggedIn(true);
+                await fetchDashboardData(data.user.id);
+            } else {
+                setErrorMsg(data.message || 'Login failed. Please verify credentials.');
+            }
+        } catch (err) {
+            console.error(err);
+            // Fallback for mocked UI if DB isn't running
+            setErrorMsg('Unable to connect to server. Try test@example.com / password123 when Postgres is running.');
+            // Allow mock login just for frontend demonstration if server is absent 
+            if (form.email === 'test' || form.email === 'user@example.com') { // Basic hard bypass for debug
+                // Ignore bypass for now, strict db requirement 
+            }
+        }
+        setLoading(false)
     }
 
     if (!isLoggedIn) {
@@ -62,11 +99,13 @@ export default function Login() {
                             </p>
                         </div>
 
+                        {errorMsg && <div className="error-banner">{errorMsg}</div>}
+
                         <form className="login-form" onSubmit={handleSubmit}>
                             {mode === 'signup' && (
                                 <div className="field-wrap">
                                     <label>Full Name</label>
-                                    <input name="name" type="text" placeholder="Your full name" value={form.name} onChange={handleInput} required />
+                                    <input name="name" type="text" placeholder="Your full name" value={form.name} onChange={handleInput} required={mode === 'signup'} />
                                 </div>
                             )}
 
@@ -97,7 +136,7 @@ export default function Login() {
                             {mode === 'signup' && (
                                 <div className="field-wrap">
                                     <label>Confirm Password</label>
-                                    <input name="confirm" type="password" placeholder="••••••••" value={form.confirm} onChange={handleInput} required />
+                                    <input name="confirm" type="password" placeholder="••••••••" value={form.confirm} onChange={handleInput} required={mode === 'signup'} />
                                 </div>
                             )}
 
@@ -161,26 +200,28 @@ export default function Login() {
                 {/* Header */}
                 <header className="dash-header anim-fade-up">
                     <div className="dash-user">
-                        <div className="dash-avatar">JD</div>
+                        <div className="dash-avatar">{user?.name[0] || 'U'}</div>
                         <div>
-                            <h1>Welcome Back, <span className="text-gold">Jane Doe</span></h1>
+                            <h1>Welcome Back, <span className="text-gold">{user?.name || 'Client'}</span></h1>
                             <p>Here is the status of your luxury design journey.</p>
                         </div>
                     </div>
-                    <button onClick={() => setIsLoggedIn(false)} className="btn-outline">Sign Out</button>
+                    <button onClick={() => { setIsLoggedIn(false); setUser(null); }} className="btn-outline">Sign Out</button>
                 </header>
 
                 <div className="dash-grid">
-                    {/* Active Projects */}
+                    {/* Main Column */}
                     <div className="dash-col dash-main anim-fade-up-d1">
+
+                        {/* Active Projects */}
                         <div className="dash-card glass-card">
                             <div className="card-head">
                                 <h3>Active Projects</h3>
-                                <div className="badge">Total 2</div>
+                                <div className="badge">Total {myProjects.length}</div>
                             </div>
                             <div className="project-list">
-                                {myProjects.map((p, i) => (
-                                    <div key={i} className="dash-project-item">
+                                {myProjects.length === 0 ? <p>No projects found.</p> : myProjects.map((p, i) => (
+                                    <div key={p.id} className="dash-project-item">
                                         <div className="p-img"><img src={p.img} alt={p.title} /></div>
                                         <div className="p-info">
                                             <h4>{p.title}</h4>
@@ -197,12 +238,47 @@ export default function Login() {
                             </div>
                         </div>
 
+                        {/* Payments & Invoices (NEW) */}
+                        <div className="dash-card glass-card">
+                            <div className="card-head">
+                                <h3>Payment History & Dues</h3>
+                            </div>
+                            <div className="payment-table-wrap">
+                                <table className="payment-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Description</th>
+                                            <th>Date</th>
+                                            <th>Amount</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {myPayments.length === 0 ? <tr><td colSpan="4">No payments found.</td></tr> : myPayments.map(pay => {
+                                            const d = new Date(pay.date);
+                                            return (
+                                                <tr key={pay.id}>
+                                                    <td>{pay.description}</td>
+                                                    <td>{d.toLocaleDateString()}</td>
+                                                    <td>₹ {parseFloat(pay.amount).toLocaleString('en-IN', { maximumFractionDigits: 0 })}</td>
+                                                    <td>
+                                                        <span className={`pay-status ${pay.status.toLowerCase()}`}>{pay.status}</span>
+                                                    </td>
+                                                </tr>
+                                            )
+                                        })}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        {/* Moodboards */}
                         <div className="dash-card glass-card">
                             <div className="card-head">
                                 <h3>Recent Mood Boards</h3>
                             </div>
                             <div className="mood-grid">
-                                {[1, 2, 3].map(m => (
+                                {[1, 2].map(m => (
                                     <div key={m} className={`mood-item mood-${m}`}>
                                         <div className="mood-overlay">
                                             <span>Collection #{m}</span>
@@ -252,4 +328,3 @@ export default function Login() {
         </div>
     )
 }
-
